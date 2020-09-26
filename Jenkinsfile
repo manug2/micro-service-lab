@@ -61,5 +61,16 @@ pipeline {
             }
         }
 
+
+        stage('deploy service') {
+            steps{
+                sh script: '''
+                #!/bin/bash
+                chmod +x ./deploy/*.sh
+                ./deploy/installKubeCtl.sh
+                ./deploy/startCalcService.sh
+                '''
+            }
+        }
     }
 }
