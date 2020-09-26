@@ -72,5 +72,23 @@ pipeline {
                 '''
             }
         }
+
+        stage('regression testing') {
+            steps{
+                withMaven(
+                    maven: 'Maven_3.6.3', // (1)
+                    mavenLocalRepo: '.repository', // (2)
+                ){
+                  sh script: '''
+                  #!/bin/bash
+                  #retieve calc service url from file calc_service_url.txt
+                  aws_url=`cat calc_service_url.txt`
+                  cd ./regression-tests
+                  mvn clean verify -Dtest.calc.service.url="http://${aws_url}"
+                  '''
+                }
+            }
+        }
+
     }
 }
